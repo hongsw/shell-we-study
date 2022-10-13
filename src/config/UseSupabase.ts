@@ -1,4 +1,3 @@
-// UseSupabase.js
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://xxx.supabase.co";
