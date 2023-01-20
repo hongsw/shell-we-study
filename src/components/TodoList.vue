@@ -14,37 +14,46 @@
 import "ag-grid-community/styles//ag-grid.css";
 import "ag-grid-community/styles//ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
+import "ag-grid-enterprise";
+// import { LicenseManager } from "ag-grid-enterprise";
+// LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const gridApi = null;
-
 const defaultColDef = {
   resizable: true,
 };
-
 const columnDefs = [
   { headerName: "Title", field: "title" },
   { headerName: "Link", field: "link" },
   { headerName: "Co-doer", field: "coDoer" },
   { headerName: "Due", field: "due" },
-  { headerName: "Understanding", field: "understanding" },
+  {
+    headerName: "Understanding",
+    field: "understanding",
+    editable: true,
+    cellEditor: "agRichSelectCellEditor",
+    cellEditorPopup: true,
+    cellEditorParams: {
+      values: ["Not yet", "Doing", "Understanding"],
+    },
+  },
 ];
-
 const rowData = [
-  //   fetch()
+  // fetch()
   // [DATA-EXAMPLE]
   {
     title: "TOEIC",
     link: "https://www.toeic.co.kr/",
     coDoer: "jihong, ji, hong",
     due: "2023/01/31",
-    understanding: "Not",
+    understanding: "Not yet",
   },
   {
     title: "TOEIC",
     link: "https://www.toeic.co.kr/",
     coDoer: "jihong, ji, hong",
     due: "2023/01/31",
-    understanding: "Not",
+    understanding: "Not yet",
   },
 ];
 
@@ -81,24 +90,8 @@ const onGridSizeChanged = (params) => {
 };
 
 const onGridReady = (params) => {
-  this.rowdAta = [
-    //   fetch()
-    // [DATA-EXAMPLE]
-    {
-      title: "TOEIC",
-      link: "https://www.toeic.co.kr/",
-      coDoer: "jihong, ji, hong",
-      due: "2023/01/31",
-      understanding: "Not",
-    },
-    {
-      title: "TOEIC",
-      link: "https://www.toeic.co.kr/",
-      coDoer: "jihong, ji, hong",
-      due: "2023/01/31",
-      understanding: "Not",
-    },
-  ];
+  // gridApi = params.api;
+  // params.api.sizeColumnsToFit();
 };
 </script>
 <style scoped>
