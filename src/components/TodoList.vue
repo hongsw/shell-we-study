@@ -1,4 +1,5 @@
 <template>
+  <button class="add_btn" @click="clickAddTodo">+ NEW</button>
   <ag-grid-vue
     class="ag-theme-alpine"
     :columnDefs="columnDefs"
@@ -9,14 +10,25 @@
     @grid-size-changed="onGridSizeChanged"
   >
   </ag-grid-vue>
+  <AddTodoModal v-if="showModal" @close="showModal = false">
+    <template v-slot:header>
+      <button class="save_btn" @click="showModal = false">저장</button>
+    </template>
+  </AddTodoModal>
 </template>
+
 <script setup>
+import AddTodoModal from "./AddTodoModal.vue";
+import { ref } from "vue";
+
 import "ag-grid-community/styles//ag-grid.css";
 import "ag-grid-community/styles//ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-enterprise";
 // import { LicenseManager } from "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
+
+const showModal = ref(false);
 
 const gridApi = null;
 const defaultColDef = {
@@ -93,10 +105,20 @@ const onGridReady = (params) => {
   // gridApi = params.api;
   // params.api.sizeColumnsToFit();
 };
+
+const clickAddTodo = () => {
+  showModal.value = !showModal.value;
+};
 </script>
 <style scoped>
 .ag-theme-alpine {
   width: 70vh;
   height: 50vh;
+}
+.add_btn {
+  display: flex;
+}
+.save_btn {
+  display: flex;
 }
 </style>
