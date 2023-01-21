@@ -9,6 +9,7 @@
           <div class="modal-body">
             <small class="section_title">Title</small>
             <input v-model="input_title" class="title" type="text" />
+            <hr />
 
             <div class="input_section">
               <div class="is-vertical">
@@ -23,8 +24,9 @@
                 ></textarea>
               </div>
               <div class="is-vertical">
-                <div id="app">
-                  <!-- v-date-picker -->
+                <div>
+                  <small class="section_title">Due</small>
+                  <Datepicker v-model="pickedDate" />
                 </div>
                 <div>
                   <small class="section_title">co-doer</small
@@ -47,12 +49,14 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import Datepicker from "vue3-datepicker";
 
 const input_title = ref("");
 const input_link = ref("");
 const input_comment = ref("");
 const input_coDoer = ref("");
 const coDoer_list = [];
+const pickedDate = ref(new Date());
 
 const addCoDoer = () => {
   const li = document.createElement("li");
