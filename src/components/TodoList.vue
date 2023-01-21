@@ -10,7 +10,11 @@
     @grid-size-changed="onGridSizeChanged"
   >
   </ag-grid-vue>
-  <AddTodoModal v-if="showModal" @close="showModal = false">
+  <AddTodoModal
+    v-if="showModal"
+    @close="showModal = false"
+    @addNewTodo="saveNewTodo"
+  >
     <template v-slot:header>
       <button class="save_btn" @click="showModal = false">저장</button>
     </template>
@@ -104,6 +108,15 @@ const onGridSizeChanged = (params) => {
 const onGridReady = (params) => {
   // gridApi = params.api;
   // params.api.sizeColumnsToFit();
+};
+
+const saveNewTodo = (input_data) => {
+  alert("DFdf");
+  console.log(input_data.title.value);
+  console.log(input_data.link.value);
+  console.log(input_data.comment.value);
+  console.log(input_data.due.value);
+  console.log(input_data.coDoers);
 };
 
 const clickAddTodo = () => {

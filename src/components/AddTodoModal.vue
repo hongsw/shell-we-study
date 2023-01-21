@@ -4,6 +4,7 @@
       <div class="modal-wrapper">
         <div class="modal-container">
           <div class="modal-header">
+            <!-- <div style="width: 10px height: 10px;" @click="saveTodo"></div> -->
             <slot name="header"> default header </slot>
           </div>
           <div class="modal-body">
@@ -26,10 +27,10 @@
               <div class="is-vertical">
                 <div>
                   <small class="section_title">Due</small>
-                  <Datepicker v-model="pickedDate" />
+                  <Datepicker v-model="input_Date" />
                 </div>
                 <div>
-                  <small class="section_title">co-doer</small
+                  <small class="section_title">co-doers</small
                   ><input
                     v-model="input_coDoer"
                     @keyup.enter="addCoDoer"
@@ -48,15 +49,25 @@
   </transition>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import Datepicker from "vue3-datepicker";
 
 const input_title = ref("");
 const input_link = ref("");
 const input_comment = ref("");
+const input_Date = ref(new Date());
 const input_coDoer = ref("");
 const coDoer_list = [];
-const pickedDate = ref(new Date());
+
+const input_data = {
+  title: input_title,
+  link: input_link,
+  comment: input_comment,
+  due: input_Date,
+  coDoers: coDoer_list,
+};
+
+const emit = defineEmits(["addNewTodo"]);
 
 const addCoDoer = () => {
   const li = document.createElement("li");
@@ -65,6 +76,11 @@ const addCoDoer = () => {
 
   coDoer_list.push(input_coDoer.value);
   input_coDoer.value = "";
+};
+
+const saveTodo = () => {
+  //emit example
+  emit("addNewTodo", input_data);
 };
 </script>
 <style>
