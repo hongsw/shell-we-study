@@ -19,7 +19,7 @@
                   v-model="input_comment"
                   class="comment"
                   cols="50"
-                  rows="9"
+                  rows="10"
                 ></textarea>
               </div>
               <div class="is-vertical">
@@ -28,7 +28,14 @@
                 </div>
                 <div>
                   <small class="section_title">co-doer</small
-                  ><input class="co-doer" type="text" />
+                  ><input
+                    v-model="input_coDoer"
+                    @keyup.enter="addCoDoer"
+                    class="co-doer"
+                    type="text"
+                  />
+                  <button @click="addCoDoer">추가</button>
+                  <ul id="coDoer_list"></ul>
                 </div>
               </div>
             </div>
@@ -44,7 +51,17 @@ import { ref } from "vue";
 const input_title = ref("");
 const input_link = ref("");
 const input_comment = ref("");
+const input_coDoer = ref("");
 const coDoer_list = [];
+
+const addCoDoer = () => {
+  const li = document.createElement("li");
+  li.appendChild(document.createTextNode(input_coDoer.value));
+  document.querySelector("#coDoer_list").appendChild(li);
+
+  coDoer_list.push(input_coDoer.value);
+  input_coDoer.value = "";
+};
 </script>
 <style>
 .modal-mask {
@@ -66,7 +83,8 @@ const coDoer_list = [];
 
 .modal-container {
   width: 50vh;
-  height: 30vh;
+  min-height: 30vh;
+  height: auto;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
