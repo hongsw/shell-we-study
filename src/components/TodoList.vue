@@ -8,6 +8,7 @@
     :defaultColDef="gridOptions.defaultColDef"
     :gridOptions="gridOptions"
     @grid-ready="onGridReady"
+    @cell-clicked="onCellDelete"
   >
   </ag-grid-vue>
 
@@ -40,6 +41,7 @@ const myRowData = [
     coDoers: "jihong, ji, hong",
     due: "Jan/30/2023",
     understanding: "Not yet",
+    del_btn: "❌",
   },
   {
     title: "TOEIC",
@@ -47,6 +49,7 @@ const myRowData = [
     coDoers: "jihong, ji, hong",
     due: "Jan/31/2023",
     understanding: "Not yet",
+    del_btn: "❌",
   },
 ];
 const myColumnDefs = [
@@ -65,6 +68,7 @@ const myColumnDefs = [
     },
     suppressMenu: true,
   },
+  { headerName: "", field: "del_btn" },
 ];
 
 const gridApi = null;
@@ -73,6 +77,7 @@ const gridOptions = {
   rowData: myRowData,
   columnDefs: myColumnDefs,
   defaultColDef: {
+    flex: 1,
     resizable: true,
   },
 };
@@ -80,6 +85,10 @@ const gridOptions = {
 const onGridReady = (params) => {
   gridApi = params.api;
   params.api.sizeColumnsToFit();
+};
+
+const clickAddTodo = () => {
+  showModal.value = !showModal.value;
 };
 
 const addNewTodo = (input_data) => {
@@ -94,6 +103,7 @@ const addNewTodo = (input_data) => {
       due: date_list.join("/"),
       coDoers: input_data.coDoers.join(),
       understanding: "Not yet",
+      del_btn: "❌",
     };
     myRowData.push(tmp);
   }
@@ -102,12 +112,21 @@ const addNewTodo = (input_data) => {
 
 const clickRemoveTodo = () => {
   const selectedRow = gridOptions.api.getFocusedCell();
+  console.log(selectedRow);
   myRowData.splice(selectedRow.rowIndex, 1);
   gridOptions.api.setRowData(myRowData);
 };
 
-const clickAddTodo = () => {
-  showModal.value = !showModal.value;
+const onCellDelete = (params) => {
+  const col_name = params.column.colId;
+  if (col_name === "del_btn") {
+    const selectedRow = gridOptions.api.getFocusedCell();
+    myRowData.splice(selectedRow.rowIndex, 1);
+    gridOptions.api.setRowData(myRowData);
+  }
+  // 기존 todo modal 띄우기
+  else {
+  }
 };
 </script>
 <style scoped>
