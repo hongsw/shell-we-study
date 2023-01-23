@@ -7,7 +7,7 @@
     :defaultColDef="gridOptions.defaultColDef"
     :gridOptions="gridOptions"
     @grid-ready="onGridReady"
-    @cell-clicked="clickRowDelete"
+    @cell-clicked="clickRowData"
   >
   </ag-grid-vue>
 
@@ -15,6 +15,7 @@
     v-if="showModal"
     @close="showModal = false"
     @addNewOne="addNewTodo"
+    :v-modal="selectedRow"
   >
   </AddTodoModal>
 </template>
@@ -30,6 +31,14 @@ import "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const showModal = ref(false);
+const selectedRow = ref({
+  title: "",
+  link: "",
+  coDoers: "",
+  due: "",
+  understanding: "",
+  del_btn: "",
+});
 
 const myRowData = [
   // [DATA-EXAMPLE]
@@ -156,7 +165,7 @@ const addNewTodo = (input_data) => {
   gridOptions.api.setRowData(myRowData);
 };
 
-const clickRowDelete = (params) => {
+const clickRowData = (params) => {
   const col_name = params.column.colId;
   if (col_name === "del_btn") {
     params.api.applyTransaction({
@@ -165,6 +174,10 @@ const clickRowDelete = (params) => {
   }
   // 기존 todo modal 띄우기
   else {
+    showModal.value = true;
+    selectedRow.value = params.node.data;
+    console.log(selectedRow.value);
+    console.log(selectedRow.value.title);
   }
 };
 </script>
