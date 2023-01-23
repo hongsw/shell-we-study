@@ -101,8 +101,7 @@ const saveTodo = () => {
 }
 
 .modal-container {
-  min-width: 50vh;
-  width: auto;
+  width: 50vh;
   min-height: 30vh;
   height: auto;
   margin: 0px auto;

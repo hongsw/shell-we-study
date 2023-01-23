@@ -1,16 +1,16 @@
 <template>
   <button class="add_btn" @click="clickAddTodo">+ NEW</button>
+  <button class="remove_btn" @click="clickRemoveTodo">REMOVE</button>
   <ag-grid-vue
     class="ag-theme-alpine"
-    :columnDefs="columnDefs"
-    :rowData="rowData"
-    :defaultColDef="defaultColDef"
+    :columnDefs="gridOptions.columnDefs"
+    :rowData="gridOptions.rowData"
+    :defaultColDef="gridOptions.defaultColDef"
     :gridOptions="gridOptions"
     @grid-ready="onGridReady"
-    @first-data-rendered="onFirstDataRendered"
-    @grid-size-changed="onGridSizeChanged"
   >
   </ag-grid-vue>
+
   <AddTodoModal
     v-if="showModal"
     @close="showModal = false"
@@ -27,18 +27,18 @@ import "ag-grid-community/styles//ag-grid.css";
 import "ag-grid-community/styles//ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-enterprise";
-import { GridOptionsService } from "ag-grid-enterprise";
 // import { LicenseManager } from "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const showModal = ref(false);
+
 const myRowData = [
   // [DATA-EXAMPLE]
   {
     title: "TOEIC",
     link: "https://www.toeic.co.kr/",
     coDoers: "jihong, ji, hong",
-    due: "Jan/31/2023",
+    due: "Jan/30/2023",
     understanding: "Not yet",
   },
   {
@@ -50,10 +50,10 @@ const myRowData = [
   },
 ];
 const myColumnDefs = [
-  { headerName: "Title", field: "title" },
-  { headerName: "Link", field: "link" },
-  { headerName: "Co-doer", field: "coDoers" },
-  { headerName: "Due", field: "due" },
+  { headerName: "Title", field: "title", suppressMenu: true },
+  { headerName: "Link", field: "link", suppressMenu: true },
+  { headerName: "Co-doer", field: "coDoers", suppressMenu: true },
+  { headerName: "Due", field: "due", suppressMenu: true },
   {
     headerName: "Understanding",
     field: "understanding",
@@ -63,56 +63,22 @@ const myColumnDefs = [
     cellEditorParams: {
       values: ["Not yet", "Doing", "Understanding"],
     },
+    suppressMenu: true,
   },
 ];
 
 const gridApi = null;
-const defaultColDef = {
-  resizable: true,
-};
-const rowData = myRowData;
-
+const columnApi = null;
 const gridOptions = {
   rowData: myRowData,
   columnDefs: myColumnDefs,
-};
-
-const onFirstDataRendered = (params) => {
-  params.api.sizeColumnsToFit();
-};
-
-const onGridSizeChanged = (params) => {
-  // get the current grids width
-  var gridWidth = document.getElementById("grid-wrapper").offsetWidth;
-  // keep track of which columns to hide/show
-  var columnsToShow = [];
-  var columnsToHide = [];
-  // iterate over all columns (visible or not) and work out
-  // now many columns can fit (based on their minWidth)
-  var totalColsWidth = 0;
-  var allColumns = params.columnApi.getColumns();
-  if (allColumns && allColumns.length > 0) {
-    for (var i = 0; i < allColumns.length; i++) {
-      var column = allColumns[i];
-      totalColsWidth += column.getMinWidth() || 0;
-      if (totalColsWidth > gridWidth) {
-        columnsToHide.push(column.getColId());
-      } else {
-        columnsToShow.push(column.getColId());
-      }
-    }
-  }
-  // show/hide columns based on current grid width
-  params.columnApi.setColumnsVisible(columnsToShow, true);
-  params.columnApi.setColumnsVisible(columnsToHide, false);
-  // fill out any available space to ensure there are no gaps
-  params.api.sizeColumnsToFit();
+  defaultColDef: {
+    resizable: true,
+  },
 };
 
 const onGridReady = (params) => {
   gridApi = params.api;
-  console.log("onGridReady");
-  console.log(params.api);
   params.api.sizeColumnsToFit();
 };
 
@@ -131,8 +97,12 @@ const addNewTodo = (input_data) => {
     };
     myRowData.push(tmp);
   }
+  gridOptions.api.setRowData(myRowData);
+};
 
-  console.log(myRowData);
+const clickRemoveTodo = () => {
+  const selectedRow = gridOptions.api.getFocusedCell();
+  myRowData.splice(selectedRow.rowIndex, 1);
   gridOptions.api.setRowData(myRowData);
 };
 
@@ -146,6 +116,9 @@ const clickAddTodo = () => {
   height: 50vh;
 }
 .add_btn {
+  display: flex;
+}
+.remove_btn {
   display: flex;
 }
 </style>
