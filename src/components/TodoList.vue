@@ -1,6 +1,5 @@
 <template>
   <button class="add_btn" @click="clickAddTodo">+ NEW</button>
-  <button class="remove_btn" @click="clickRemoveTodo">REMOVE</button>
   <ag-grid-vue
     class="ag-theme-alpine"
     :columnDefs="gridOptions.columnDefs"
@@ -157,19 +156,12 @@ const addNewTodo = (input_data) => {
   gridOptions.api.setRowData(myRowData);
 };
 
-const clickRemoveTodo = () => {
-  const selectedRow = gridOptions.api.getFocusedCell();
-  myRowData.splice(selectedRow.rowIndex, 1);
-  gridOptions.api.setRowData(myRowData);
-};
-
 const clickRowDelete = (params) => {
   const col_name = params.column.colId;
   if (col_name === "del_btn") {
-    const selectedRow = gridOptions.api.getFocusedCell();
-    console.log(selectedRow);
-    myRowData.splice(selectedRow.rowIndex, 1);
-    gridOptions.api.setRowData(myRowData);
+    params.api.applyTransaction({
+      remove: [params.node.data],
+    });
   }
   // 기존 todo modal 띄우기
   else {
