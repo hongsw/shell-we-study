@@ -5,6 +5,7 @@
     :columnDefs="columnDefs"
     :rowData="rowData"
     :defaultColDef="defaultColDef"
+    :gridOptions="gridOptions"
     @grid-ready="onGridReady"
     @first-data-rendered="onFirstDataRendered"
     @grid-size-changed="onGridSizeChanged"
@@ -26,19 +27,32 @@ import "ag-grid-community/styles//ag-grid.css";
 import "ag-grid-community/styles//ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-enterprise";
+import { GridOptionsService } from "ag-grid-enterprise";
 // import { LicenseManager } from "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const showModal = ref(false);
-
-const gridApi = null;
-const defaultColDef = {
-  resizable: true,
-};
-const columnDefs = [
+const myRowData = [
+  // [DATA-EXAMPLE]
+  {
+    title: "TOEIC",
+    link: "https://www.toeic.co.kr/",
+    coDoers: "jihong, ji, hong",
+    due: "Jan/31/2023",
+    understanding: "Not yet",
+  },
+  {
+    title: "TOEIC",
+    link: "https://www.toeic.co.kr/",
+    coDoers: "jihong, ji, hong",
+    due: "Jan/31/2023",
+    understanding: "Not yet",
+  },
+];
+const myColumnDefs = [
   { headerName: "Title", field: "title" },
   { headerName: "Link", field: "link" },
-  { headerName: "Co-doer", field: "coDoer" },
+  { headerName: "Co-doer", field: "coDoers" },
   { headerName: "Due", field: "due" },
   {
     headerName: "Understanding",
@@ -51,24 +65,17 @@ const columnDefs = [
     },
   },
 ];
-const rowData = [
-  // fetch()
-  // [DATA-EXAMPLE]
-  {
-    title: "TOEIC",
-    link: "https://www.toeic.co.kr/",
-    coDoer: "jihong, ji, hong",
-    due: "2023/01/31",
-    understanding: "Not yet",
-  },
-  {
-    title: "TOEIC",
-    link: "https://www.toeic.co.kr/",
-    coDoer: "jihong, ji, hong",
-    due: "2023/01/31",
-    understanding: "Not yet",
-  },
-];
+
+const gridApi = null;
+const defaultColDef = {
+  resizable: true,
+};
+const rowData = myRowData;
+
+const gridOptions = {
+  rowData: myRowData,
+  columnDefs: myColumnDefs,
+};
 
 const onFirstDataRendered = (params) => {
   params.api.sizeColumnsToFit();
@@ -103,20 +110,30 @@ const onGridSizeChanged = (params) => {
 };
 
 const onGridReady = (params) => {
-  // gridApi = params.api;
-  // params.api.sizeColumnsToFit();
+  gridApi = params.api;
+  console.log("onGridReady");
+  console.log(params.api);
+  params.api.sizeColumnsToFit();
 };
 
 const addNewTodo = (input_data) => {
   showModal.value = false;
+
   if (input_data.title.value != "") {
-    // save
-    console.log(input_data.title.value);
-    console.log(input_data.link.value);
-    console.log(input_data.comment.value);
-    console.log(input_data.due.value);
-    console.log(input_data.coDoers);
+    const date_list = input_data.due.value.toString().split(" ").slice(1, 4);
+    const tmp = {
+      title: input_data.title.value,
+      link: input_data.link.value,
+      comment: input_data.link.value,
+      due: date_list.join("/"),
+      coDoers: input_data.coDoers.join(),
+      understanding: "Not yet",
+    };
+    myRowData.push(tmp);
   }
+
+  console.log(myRowData);
+  gridOptions.api.setRowData(myRowData);
 };
 
 const clickAddTodo = () => {
