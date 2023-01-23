@@ -13,11 +13,8 @@
   <AddTodoModal
     v-if="showModal"
     @close="showModal = false"
-    @addNewTodo="saveNewTodo"
+    @addNewOne="addNewTodo"
   >
-    <template v-slot:header>
-      <button class="save_btn" @click="showModal = false">저장</button>
-    </template>
   </AddTodoModal>
 </template>
 
@@ -110,13 +107,16 @@ const onGridReady = (params) => {
   // params.api.sizeColumnsToFit();
 };
 
-const saveNewTodo = (input_data) => {
-  alert("DFdf");
-  console.log(input_data.title.value);
-  console.log(input_data.link.value);
-  console.log(input_data.comment.value);
-  console.log(input_data.due.value);
-  console.log(input_data.coDoers);
+const addNewTodo = (input_data) => {
+  showModal.value = false;
+  if (input_data.title.value != "") {
+    // save
+    console.log(input_data.title.value);
+    console.log(input_data.link.value);
+    console.log(input_data.comment.value);
+    console.log(input_data.due.value);
+    console.log(input_data.coDoers);
+  }
 };
 
 const clickAddTodo = () => {
@@ -129,9 +129,6 @@ const clickAddTodo = () => {
   height: 50vh;
 }
 .add_btn {
-  display: flex;
-}
-.save_btn {
   display: flex;
 }
 </style>

@@ -1,52 +1,49 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modal-header">
-            <!-- <div style="width: 10px height: 10px;" @click="saveTodo"></div> -->
-            <slot name="header"> default header </slot>
-          </div>
-          <div class="modal-body">
-            <small class="section_title">Title</small>
-            <input v-model="input_title" class="title" type="text" />
-            <hr />
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
+        <div class="modal-header">
+          <button class="save_btn" @click="saveTodo">저장</button>
+        </div>
+        <div class="modal-body">
+          <small class="section_title">Title</small>
+          <input v-model="input_title" class="title" type="text" />
+          <hr />
 
-            <div class="input_section">
-              <div class="is-vertical">
-                <small class="section_title">Link</small>
-                <input v-model="input_link" class="link" type="text" />
-                <small class="section_title">Comment</small
-                ><textarea
-                  v-model="input_comment"
-                  class="comment"
-                  cols="50"
-                  rows="10"
-                ></textarea>
+          <div class="input_section">
+            <div class="is-vertical">
+              <small class="section_title">Link</small>
+              <input v-model="input_link" class="link" type="text" />
+              <small class="section_title">Comment</small
+              ><textarea
+                v-model="input_comment"
+                class="comment"
+                cols="50"
+                rows="10"
+              ></textarea>
+            </div>
+            <div class="is-vertical">
+              <div>
+                <small class="section_title">Due</small>
+                <Datepicker v-model="input_Date" />
               </div>
-              <div class="is-vertical">
-                <div>
-                  <small class="section_title">Due</small>
-                  <Datepicker v-model="input_Date" />
-                </div>
-                <div>
-                  <small class="section_title">co-doers</small
-                  ><input
-                    v-model="input_coDoer"
-                    @keyup.enter="addCoDoer"
-                    class="co-doer"
-                    type="text"
-                  />
-                  <button @click="addCoDoer">추가</button>
-                  <ul id="coDoer_list"></ul>
-                </div>
+              <div>
+                <small class="section_title">co-doers</small
+                ><input
+                  v-model="input_coDoer"
+                  @keyup.enter="addCoDoer"
+                  class="co-doer"
+                  type="text"
+                />
+                <button @click="addCoDoer">추가</button>
+                <ul id="coDoer_list"></ul>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 <script setup>
 import { ref, defineEmits } from "vue";
@@ -67,22 +64,24 @@ const input_data = {
   coDoers: coDoer_list,
 };
 
-const emit = defineEmits(["addNewTodo"]);
+const emit = defineEmits(["addNewOne"]);
 
 const addCoDoer = () => {
-  const li = document.createElement("li");
-  li.appendChild(document.createTextNode(input_coDoer.value));
-  document.querySelector("#coDoer_list").appendChild(li);
+  if (input_coDoer.value != "") {
+    const li = document.createElement("li");
+    li.appendChild(document.createTextNode(input_coDoer.value));
+    document.querySelector("#coDoer_list").appendChild(li);
 
-  coDoer_list.push(input_coDoer.value);
-  input_coDoer.value = "";
+    coDoer_list.push(input_coDoer.value);
+    input_coDoer.value = "";
+  }
 };
 
 const saveTodo = () => {
-  //emit example
-  emit("addNewTodo", input_data);
+  emit("addNewOne", input_data);
 };
 </script>
+
 <style>
 .modal-mask {
   position: fixed;
@@ -102,7 +101,8 @@ const saveTodo = () => {
 }
 
 .modal-container {
-  width: 50vh;
+  min-width: 50vh;
+  width: auto;
   min-height: 30vh;
   height: auto;
   margin: 0px auto;
@@ -113,7 +113,9 @@ const saveTodo = () => {
   transition: all 0.3s ease;
   color: black;
 }
-
+.save_btn {
+  display: flex;
+}
 input {
   display: block;
   width: 300px;
