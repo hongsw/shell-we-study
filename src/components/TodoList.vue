@@ -15,7 +15,7 @@
     v-if="showModal"
     @close="showModal = false"
     @addNewOne="addNewTodo"
-    :todoData="todoData"
+    :selectedRow="selectedRow"
   >
   </AddTodoModal>
 </template>
@@ -31,7 +31,7 @@ import "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const showModal = ref(false);
-const todoData = ref({
+const selectedRow = ref({
   title: "",
   link: "",
   coDoers: "",
@@ -78,8 +78,8 @@ const myColumnDefs = [
   { headerName: "", field: "del_btn", suppressMenu: true },
 ];
 
-const gridApi = null;
-const columnApi = null;
+let gridApi = null;
+let columnApi = null;
 const gridOptions = {
   rowData: myRowData,
   columnDefs: myColumnDefs,
@@ -145,16 +145,6 @@ const convertMonthData = (month) => {
 const addNewTodo = (input_data) => {
   showModal.value = false;
 
-  // 데이터 초기화
-  todoData.value = {
-    title: "",
-    link: "",
-    coDoers: "",
-    due: "",
-    understanding: "",
-    del_btn: "",
-  };
-
   if (input_data.title.value != "") {
     const date_list = input_data.due.value.toString().split(" ");
     date_list[1] = convertMonthData(date_list[1]);
@@ -164,15 +154,29 @@ const addNewTodo = (input_data) => {
     const tmp = {
       title: input_data.title.value,
       link: input_data.link.value,
-      comment: input_data.link.value,
-      due: date_info.join("-"),
       coDoers: input_data.coDoers.join(),
+      due: date_info.join("-"),
       understanding: "Not yet",
       del_btn: "❌",
     };
-    myRowData.push(tmp);
+    if (selectedRow.value.title === "") {
+      // 새로운 todo 저장
+      myRowData.push(tmp);
+    } else {
+      // 기존에 있던 todo 변경
+    }
   }
   gridOptions.api.setRowData(myRowData);
+
+  // 데이터 초기화
+  selectedRow.value = {
+    title: "",
+    link: "",
+    coDoers: "",
+    due: "",
+    understanding: "",
+    del_btn: "",
+  };
 };
 
 const clickRowData = (params) => {
@@ -183,11 +187,10 @@ const clickRowData = (params) => {
     });
   }
   // 기존 todo modal 띄우기
-  else {
+  else if (col_name !== "understanding") {
     showModal.value = true;
-    todoData.value = params.node.data;
-    console.log(todoData.value);
-    console.log(todoData.value.title);
+    selectedRow.value = params.node.data;
+    console.log(selectedRow.value);
   }
 };
 </script>

@@ -57,30 +57,32 @@ const input_coDoer = ref("");
 const coDoer_list = [];
 
 const props = defineProps({
-  todoData: {
+  selectedRow: {
     type: Object,
   },
 });
 
-input_title.value = props.todoData.title;
-input_link.value = props.todoData.link;
-input_date.value = new Date(props.todoData.due);
-input_coDoer.value = props.todoData.coDoers;
-// coDoer_list = props.todoData.coDoers.split(",");
-const tmp = props.todoData.coDoers.split(",");
-for (let i = 0; i < tmp.length; i++) {
-  // const li = document.createElement("li");
-  // li.appendChild(document.createTextNode(tmp[i]));
-  // document.querySelector("#coDoer_list").append(li);
+// 기존에 있던 todo 눌렀을 때
+if (props.selectedRow.title !== "") {
+  input_title.value = props.selectedRow.title;
+  input_link.value = props.selectedRow.link;
+  input_date.value = new Date(props.selectedRow.due);
+  input_coDoer.value = props.selectedRow.coDoers;
+  // coDoer_list = props.selectedRow.coDoers.split(",");
+  const tmp = props.selectedRow.coDoers.split(",");
+  for (let i = 0; i < tmp.length; i++) {
+    // const li = document.createElement("li");
+    // li.appendChild(document.createTextNode(tmp[i]));
+    // document.querySelector("#coDoer_list").append(li);
+  }
+  // input_comment.value <= db에서 가져오기
 }
-// input_comment.value <= db에서 가져오기
 
 const input_data = {
   title: input_title,
   link: input_link,
-  comment: input_comment,
-  due: input_date,
   coDoers: coDoer_list,
+  due: input_date,
 };
 
 const emit = defineEmits(["addNewOne"]);
@@ -121,7 +123,7 @@ const saveTodo = () => {
 
 .modal-container {
   width: fit-content;
-  min-height: 30vh;
+  min-height: fit-content;
   height: auto;
   margin: 0px auto;
   padding: 20px 30px;
