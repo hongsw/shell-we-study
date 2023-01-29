@@ -145,6 +145,7 @@ const convertMonthData = (month) => {
 const addNewTodo = (input_data) => {
   showModal.value = false;
 
+  // title이 있을 때만 저장
   if (input_data.title.value != "") {
     const date_list = input_data.due.value.toString().split(" ");
     date_list[1] = convertMonthData(date_list[1]);
@@ -164,6 +165,10 @@ const addNewTodo = (input_data) => {
       myRowData.push(tmp);
     } else {
       // 기존에 있던 todo 변경
+      selectedRow.value.title = input_data.title.value;
+      selectedRow.value.link = input_data.link.value;
+      selectedRow.value.coDoers = input_data.coDoers.join();
+      selectedRow.value.due = date_info.join("-");
     }
   }
   gridOptions.api.setRowData(myRowData);
