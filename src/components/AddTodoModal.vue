@@ -25,7 +25,7 @@
             <div class="is-vertical">
               <div>
                 <small class="section_title">Due</small>
-                <Datepicker v-model="input_Date" />
+                <Datepicker v-model="input_date" />
               </div>
               <div>
                 <small class="section_title">co-doers</small
@@ -46,21 +46,40 @@
   </div>
 </template>
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import Datepicker from "vue3-datepicker";
 
 const input_title = ref("");
 const input_link = ref("");
 const input_comment = ref("");
-const input_Date = ref(new Date());
+const input_date = ref(new Date());
 const input_coDoer = ref("");
 const coDoer_list = [];
+
+const props = defineProps({
+  todoData: {
+    type: Object,
+  },
+});
+
+input_title.value = props.todoData.title;
+input_link.value = props.todoData.link;
+input_date.value = new Date(props.todoData.due);
+input_coDoer.value = props.todoData.coDoers;
+// coDoer_list = props.todoData.coDoers.split(",");
+const tmp = props.todoData.coDoers.split(",");
+for (let i = 0; i < tmp.length; i++) {
+  // const li = document.createElement("li");
+  // li.appendChild(document.createTextNode(tmp[i]));
+  // document.querySelector("#coDoer_list").append(li);
+}
+// input_comment.value <= db에서 가져오기
 
 const input_data = {
   title: input_title,
   link: input_link,
   comment: input_comment,
-  due: input_Date,
+  due: input_date,
   coDoers: coDoer_list,
 };
 

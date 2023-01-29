@@ -15,7 +15,7 @@
     v-if="showModal"
     @close="showModal = false"
     @addNewOne="addNewTodo"
-    :v-modal="selectedRow"
+    :todoData="todoData"
   >
   </AddTodoModal>
 </template>
@@ -31,7 +31,7 @@ import "ag-grid-enterprise";
 // LicenseManager.setLicenseKey("info@ag-grid.com");
 
 const showModal = ref(false);
-const selectedRow = ref({
+const todoData = ref({
   title: "",
   link: "",
   coDoers: "",
@@ -145,6 +145,16 @@ const convertMonthData = (month) => {
 const addNewTodo = (input_data) => {
   showModal.value = false;
 
+  // 데이터 초기화
+  todoData.value = {
+    title: "",
+    link: "",
+    coDoers: "",
+    due: "",
+    understanding: "",
+    del_btn: "",
+  };
+
   if (input_data.title.value != "") {
     const date_list = input_data.due.value.toString().split(" ");
     date_list[1] = convertMonthData(date_list[1]);
@@ -175,9 +185,9 @@ const clickRowData = (params) => {
   // 기존 todo modal 띄우기
   else {
     showModal.value = true;
-    selectedRow.value = params.node.data;
-    console.log(selectedRow.value);
-    console.log(selectedRow.value.title);
+    todoData.value = params.node.data;
+    console.log(todoData.value);
+    console.log(todoData.value.title);
   }
 };
 </script>
