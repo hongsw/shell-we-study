@@ -120,7 +120,7 @@ const saveTodo = () => {
 }
 
 .modal-container {
-  width: 50vh;
+  width: fit-content;
   min-height: 30vh;
   height: auto;
   margin: 0px auto;
@@ -139,6 +139,9 @@ input {
   width: 300px;
   height: 50px;
   margin: 3px;
+}
+textarea {
+  resize: none;
 }
 .input_section {
   display: flex;
