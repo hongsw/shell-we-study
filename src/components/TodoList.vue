@@ -34,7 +34,7 @@ const showModal = ref(false);
 const selectedRow = ref({
   title: "",
   link: "",
-  coDoers: "",
+  coDoers: [],
   due: "",
   understanding: "",
   del_btn: "",
@@ -45,7 +45,7 @@ const myRowData = [
   {
     title: "TOEIC",
     link: "https://www.toeic.co.kr/",
-    coDoers: "jihong, ji, hong",
+    coDoers: ["jihong", "ji", "hong"],
     due: "2023-01-30",
     understanding: "Not yet",
     del_btn: "❌",
@@ -53,7 +53,7 @@ const myRowData = [
   {
     title: "TOEIC",
     link: "https://www.toeic.co.kr/",
-    coDoers: "jihong, ji, hong",
+    coDoers: ["jihong", "ji", "hong"],
     due: "2023-01-31",
     understanding: "Not yet",
     del_btn: "❌",
@@ -155,7 +155,7 @@ const addNewTodo = (input_data) => {
     const tmp = {
       title: input_data.title.value,
       link: input_data.link.value,
-      coDoers: input_data.coDoers.join(),
+      coDoers: input_data.coDoers.value,
       due: date_info.join("-"),
       understanding: "Not yet",
       del_btn: "❌",
@@ -167,7 +167,7 @@ const addNewTodo = (input_data) => {
       // 기존에 있던 todo 변경
       selectedRow.value.title = input_data.title.value;
       selectedRow.value.link = input_data.link.value;
-      selectedRow.value.coDoers = input_data.coDoers.join();
+      selectedRow.value.coDoers = input_data.coDoers.value;
       selectedRow.value.due = date_info.join("-");
     }
   }
@@ -195,7 +195,6 @@ const clickRowData = (params) => {
   else if (col_name !== "understanding") {
     showModal.value = true;
     selectedRow.value = params.node.data;
-    console.log(selectedRow.value);
   }
 };
 </script>

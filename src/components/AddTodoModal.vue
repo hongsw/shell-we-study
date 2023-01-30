@@ -36,7 +36,11 @@
                   type="text"
                 />
                 <button @click="addCoDoer">추가</button>
-                <ul id="coDoer_list"></ul>
+                <ul id="coDoer_list">
+                  <div v-if="coDoer_list.length > 0">
+                    <li v-for="co in coDoer_list">{{ co }}</li>
+                  </div>
+                </ul>
               </div>
             </div>
           </div>
@@ -54,7 +58,7 @@ const input_link = ref("");
 const input_comment = ref("");
 const input_date = ref(new Date());
 const input_coDoer = ref("");
-const coDoer_list = [];
+const coDoer_list = ref([]);
 
 const props = defineProps({
   selectedRow: {
@@ -67,14 +71,7 @@ if (props.selectedRow.title !== "") {
   input_title.value = props.selectedRow.title;
   input_link.value = props.selectedRow.link;
   input_date.value = new Date(props.selectedRow.due);
-  input_coDoer.value = props.selectedRow.coDoers;
-  // coDoer_list = props.selectedRow.coDoers.split(",");
-  const tmp = props.selectedRow.coDoers.split(",");
-  for (let i = 0; i < tmp.length; i++) {
-    // const li = document.createElement("li");
-    // li.appendChild(document.createTextNode(tmp[i]));
-    // document.querySelector("#coDoer_list").append(li);
-  }
+  coDoer_list.value = props.selectedRow.coDoers;
   // input_comment.value <= db에서 가져오기
 }
 
@@ -89,11 +86,7 @@ const emit = defineEmits(["addNewOne"]);
 
 const addCoDoer = () => {
   if (input_coDoer.value != "") {
-    const li = document.createElement("li");
-    li.appendChild(document.createTextNode(input_coDoer.value));
-    document.querySelector("#coDoer_list").appendChild(li);
-
-    coDoer_list.push(input_coDoer.value);
+    coDoer_list.value.push(input_coDoer.value);
     input_coDoer.value = "";
   }
 };
