@@ -38,7 +38,10 @@
                 <button @click="addCoDoer">추가</button>
                 <ul id="coDoer_list">
                   <div v-if="coDoer_list.length > 0">
-                    <li v-for="co in coDoer_list">{{ co }}</li>
+                    <li v-for="(co, index) in coDoer_list" :key="co" class="">
+                      {{ co }}
+                      <button @click="coDoer_list.splice(index, 1)">❌</button>
+                    </li>
                   </div>
                 </ul>
               </div>
@@ -50,7 +53,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, VueElement } from "vue";
 import Datepicker from "vue3-datepicker";
 
 const input_title = ref("");
@@ -143,5 +146,9 @@ textarea {
 }
 .section_title {
   display: flex;
+}
+#coDoer_list li {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
